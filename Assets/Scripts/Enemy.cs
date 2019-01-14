@@ -6,8 +6,16 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] GameObject deathFX;
     [SerializeField] Transform parent;
-    // Start is called before the first frame update
+    [SerializeField] int scorePerHit = 12;
+    ScoreBoard scoreBoard;
+   
     void Start()
+    {
+        AddBoxCollider();
+        scoreBoard = FindObjectOfType<ScoreBoard>();
+    }
+
+    private void AddBoxCollider()
     {
         Collider enemyBoxCollider = gameObject.AddComponent<BoxCollider>();
         enemyBoxCollider.isTrigger = false;
@@ -15,9 +23,10 @@ public class Enemy : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
-        deathFX.SetActive(true);//plays explosion
+        scoreBoard.ScoreHit(scorePerHit);
+        deathFX.SetActive(true);//plays explosion       
         GameObject fx = Instantiate(deathFX, transform.position, Quaternion.identity);
         fx.transform.parent = parent;
-        Destroy(gameObject);
+        Destroy(gameObject);      
     }
 }

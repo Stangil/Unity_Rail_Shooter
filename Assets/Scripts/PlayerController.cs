@@ -20,13 +20,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float controlPitchFactor = -15f;
     [SerializeField] float controlYawFactor = 11f;
     [SerializeField] float controlRollFactor = -20f;
+    [SerializeField] int scorePerFrame = 1;
+    ScoreBoard scoreBoard;
     float xThrow, yThrow;
     bool alive = true;
-
+    private void Start()
+    {
+        scoreBoard = FindObjectOfType<ScoreBoard>();
+    }
     void Update()
     {
         if (alive)
         {
+            //scoreBoard.ScoreHit(scorePerFrame);
             ProcessTranslation();
             ProcessRotation();
         }
