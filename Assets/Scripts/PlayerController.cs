@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("In m")] [SerializeField] float yLimitMax = 2f;
     [Tooltip("In m")] [SerializeField] float yLimitMin = -2f;
     [SerializeField] GameObject[] guns;
+    [SerializeField] GameObject[] thrusters;
 
     [Header("Screen-position Based")]
     [SerializeField] float positionPitchFactor = -6.5f;
@@ -42,7 +43,8 @@ public class PlayerController : MonoBehaviour
     void OnPlayerDeath()//Called by a string reference in CollisionHandler
     {
         alive = false;
-        //print("STOP!!!!");
+        SetGunsActive(false);
+        SetThrustersActive(false);
     }
     void ProcessRotation()//Makes ship point ahead instead of to center of screen
     {
@@ -80,27 +82,29 @@ public class PlayerController : MonoBehaviour
     {
         if (CrossPlatformInputManager.GetButton("Fire"))
         {
-            ActivateGuns();
+            SetGunsActive(true);
         }
         else
         {
-            DeactivateGuns();
+            SetGunsActive(false);
         }
     }
-    private void ActivateGuns()
+    private void SetGunsActive(bool isActive)
     {
-        foreach(GameObject gun in guns)
+        foreach(GameObject gun in guns)//May affect death FX
         {
-            gun.SetActive(true);
-        }
-    }
-    private void DeactivateGuns()
-    {
-        foreach(GameObject gun in guns)
-        {
-            gun.SetActive(false);
+            //gun.SetActive(isActive);
+            var emmisionModule = gun.GetComponent<ParticleSystem>().emission;
+            emmisionModule.enabled = isActive;
         }
     }
 
-   
+    private void SetThrustersActive(bool isActive)
+    {
+        foreach (GameObject thruster in thrusters)//May affect death FX
+        {
+            thruster.SetActive(isActive);
+        }
+    }
+
 }
